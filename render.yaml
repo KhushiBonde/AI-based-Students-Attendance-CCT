@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: export CMAKE_BUILD_PARALLEL_LEVEL=1 MAKEFLAGS="-j1" && pip install --no-cache-dir -r requirements.txt
-    startCommand: gunicorn -w 1 --threads 2 app:app
+    startCommand: gunicorn -b 0.0.0.0:5000 -w 1 --threads 2 app:app
     envVars:
       - key: RENDER
         value: "true"
