@@ -1,0 +1,25 @@
+# Python bytecode & cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# IDE configs
+.vscode/
+.idea/
+
+# Local databases and photos (Render uses persistent disk)
+known_faces/*
+!known_faces/.gitkeep
+data/encodings_db.pkl
+data/students.csv
+data/sessions.csv
+data/attendance/*
+!data/attendance/.gitkeep

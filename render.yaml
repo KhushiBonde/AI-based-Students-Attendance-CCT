@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: student-attendance-system
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -w 1 --threads 2 app:app
+    envVars:
+      - key: RENDER
+        value: "true"
+      - key: PORT
+        value: 5000
+    disk:
+      name: attendance-storage
+      mountPath: /opt/render/persistent
+      sizeGB: 1

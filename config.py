@@ -4,11 +4,17 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Data storage paths
-DATA_DIR = os.path.join(BASE_DIR, "data")
+if os.environ.get('RENDER') == 'true':
+    PERSISTENT_DIR = "/opt/render/persistent"
+    DATA_DIR = os.path.join(PERSISTENT_DIR, "data")
+    KNOWN_FACES_DIR = os.path.join(PERSISTENT_DIR, "known_faces")
+else:
+    DATA_DIR = os.path.join(BASE_DIR, "data")
+    KNOWN_FACES_DIR = os.path.join(BASE_DIR, "known_faces")
+
 ENCODINGS_DB_PATH = os.path.join(DATA_DIR, "encodings_db.pkl")
 STUDENTS_CSV_PATH = os.path.join(DATA_DIR, "students.csv")
 ATTENDANCE_DIR = os.path.join(DATA_DIR, "attendance")
-KNOWN_FACES_DIR = os.path.join(BASE_DIR, "known_faces")
 
 # Create directories if they do not exist
 os.makedirs(DATA_DIR, exist_ok=True)
