@@ -3,7 +3,7 @@ services:
     name: student-attendance-system
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt
+    buildCommand: export CMAKE_BUILD_PARALLEL_LEVEL=1 MAKEFLAGS="-j1" && pip install --no-cache-dir -r requirements.txt
     startCommand: gunicorn -w 1 --threads 2 app:app
     envVars:
       - key: RENDER
