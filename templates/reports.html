@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}Reports & Analytics | AI CCTV Attendance{% endblock %}
+
+{% block content %}
+<div class="config-layout" id="reports-section">
+    <div>
+        <h1 class="gradient-text" style="margin-bottom: 0.2rem;">Reports & Analytics</h1>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">Generate consolidated records, evaluate course percentages, and manage the student directory.</p>
+    </div>
+
+    <div class="grid" style="grid-template-columns: 1fr; gap: 2rem;">
+        <!-- Left: Export Options -->
+        <div class="glass-card" id="export-options-card">
+            <h2 class="gradient-text">Attendance Exporter</h2>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.5;">
+                Compile all finished sessions into a master Excel spreadsheet. The system automatically computes student attendance rates per subject and flags students falling below the mandatory **UGC 75% attendance threshold** in red.
+            </p>
+            
+            <div style="background: rgba(139, 92, 246, 0.05); border: 1px solid rgba(139, 92, 246, 0.15); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+                <div style="font-size: 2rem;">📊</div>
+                <div>
+                    <h4 style="color: var(--accent-violet); font-size: 0.95rem; margin-bottom: 0.2rem; font-weight: 700;">Consolidated Course Report</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0;">Generates an `.xlsx` file with custom red fills for sub-75% attendance.</p>
+                </div>
+            </div>
+
+            <a href="/admin/reports/weekly/export" class="btn btn-primary" style="width: 100%;" id="download-weekly-btn">
+                Generate & Download Excel Report
+            </a>
+        </div>
+
+        <!-- Right: Registered Students List -->
+        <div class="glass-card" id="students-directory-card">
+            <div class="card-title" style="margin-bottom: 1rem;">
+                <h2 class="gradient-text">Student Directory</h2>
+                <span style="font-size: 0.8rem; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 0.2rem 0.6rem; border-radius: 20px;">
+                    Total: {{ students|length }}
+                </span>
+            </div>
+            
+            <div class="table-container" style="max-height: 350px; overflow-y: auto;">
+                <table id="students-table">
+                    <thead>
+                        <tr>
+                            <th>Roll Number</th>
+                            <th>Name</th>
+                            <th>Section</th>
+                            <th>Photos Used</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if students %}
+                            {% for student in students %}
+                            <tr id="student-row-{{ student.roll_number }}">
+                                <td><strong>{{ student.roll_number }}</strong></td>
+                                <td>{{ student.name }}</td>
+                                <td><span class="badge badge-present" style="background: rgba(6, 182, 212, 0.05); border-color: rgba(6, 182, 212, 0.15); color: var(--accent-cyan);">{{ student.section }}</span></td>
+                                <td>{{ student.photo_count }} photos</td>
+                                <td>
+                                    <form action="/admin/students/{{ student.roll_number }}/delete" method="POST" onsubmit="return confirm('Delete all biometric templates and photo references for this student?')">
+                                        <button type="submit" class="btn btn-danger btn-sm" style="background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.2); color: var(--accent-red); box-shadow: none;">
+                                            De-enroll
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="empty-state">No students enrolled yet. Go to Enrollment to register.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

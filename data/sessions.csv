@@ -1,0 +1,2 @@
+session_id,subject,section,date,start_time,end_time,total_enrolled,total_present,csv_path
+f27e062e-873f-4bca-ab67-96f3c6afbc31,data science,cse-ds,2026-06-18,2026-06-18T10:25:23.935408,2026-06-18T10:25:37.104379,1,1,C:\Users\asus\OneDrive\Desktop\StudentAttendance\data\attendance\2026-06-18_data_science_cse-ds_f27e062e.csv

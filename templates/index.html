@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard | AI CCTV Attendance{% endblock %}
+
+{% block content %}
+<div class="grid" id="dashboard-feed">
+    <!-- Camera Stream Frame -->
+    <div class="glass-card" id="camera-stream-card">
+        <div class="card-title">
+            <h2 class="gradient-text">Live Classroom Monitor</h2>
+            <div class="camera-status" id="stream-status-badge">
+                <div class="pulse-dot {% if active_session %}active{% else %}inactive{% endif %}" id="status-dot"></div>
+                <span id="status-text">{% if active_session %}Session Active{% else %}Inactive{% endif %}</span>
+            </div>
+        </div>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">
+            Mount the camera facing the classroom. Faces detected within frontal range will be evaluated in real time.
+        </p>
+        
+        <div class="video-container" id="stream-wrapper">
+            <img class="video-stream" src="{{ url_for('video_feed') }}" alt="Live Classroom Video Feed" id="video-img">
+        </div>
+    </div>
+
+    <!-- Active Session Attendance Log -->
+    <div class="glass-card" id="session-log-card">
+        <!-- If Session is Active -->
+        <div id="session-details" {% if active_session %}style="display: block;"{% else %}style="display: none;"{% endif %}>
+            <h2 class="gradient-text" style="margin-bottom: 0.5rem;">Attendance Tracker</h2>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <div>
+                    <h3 id="session-subject" style="margin-bottom: 0.1rem; font-size: 1.15rem;">{{ active_session.subject if active_session else '' }}</h3>
+                    <span style="color: var(--text-secondary); font-size: 0.85rem;">Section: <strong id="session-section">{{ active_session.section if active_session else '' }}</strong></span>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-cyan);" id="session-timer">00:00</div>
+                    <span style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase;">Elapsed Time</span>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-strip">
+                <div class="stat-item" id="stat-enrolled-box">
+                    <div class="stat-num" id="count-enrolled">0</div>
+                    <div class="stat-label">Enrolled</div>
+                </div>
+                <div class="stat-item" id="stat-present-box" style="border-color: rgba(16, 185, 129, 0.25);">
+                    <div class="stat-num" style="color: var(--accent-green);" id="count-present">0</div>
+                    <div class="stat-label">Present</div>
+                </div>
+                <div class="stat-item" id="stat-absent-box" style="border-color: rgba(244, 63, 94, 0.25);">
+                    <div class="stat-num" style="color: var(--accent-red);" id="count-absent">0</div>
+                    <div class="stat-label">Absent</div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h4 style="font-weight: 600;">Real-Time Attendance Register</h4>
+                <form action="/admin/session/stop" method="POST" id="stop-session-form">
+                    <button type="submit" class="btn btn-danger btn-sm" id="stop-session-btn">Stop Session</button>
+                </form>
+            </div>
+
+            <!-- Table of Students -->
+            <div class="table-container" id="attendance-table-container">
+                <table id="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>Roll Number</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th>Confidence</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendance-table-body">
+                        <tr>
+                            <td colspan="6" class="empty-state">Loading attendance list...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- If Session is Inactive -->
+        <div id="no-session-state" {% if not active_session %}style="display: block;"{% else %}style="display: none;"{% endif %} class="empty-state">
+            <div class="empty-state-icon">📹</div>
+            <h3>No Active Session</h3>
+            <p style="margin: 0.5rem 0 1.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+                There is no active attendance tracking session. Start a new session in the Admin Panel to activate recognition.
+            </p>
+            <a href="/admin" class="btn btn-primary" id="go-to-admin-btn">Open Admin Control</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

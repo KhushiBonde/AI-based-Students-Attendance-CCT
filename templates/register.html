@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% block title %}Register Student | AI CCTV Attendance{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto;" class="glass-card" id="registration-card">
+    <h1 class="gradient-text">Student Biometric Enrollment</h1>
+    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">
+        Add a new student to the master roster. The system will process the uploaded photos and compile a 128-dimensional biometric template representing the student's facial features.
+    </p>
+
+    <form action="/admin/register" method="POST" enctype="multipart/form-data" id="student-reg-form">
+        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+            <div class="form-group">
+                <label for="name">Student Full Name</label>
+                <input type="text" name="name" id="name" class="form-control" placeholder="e.g., Krish Urkude" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="roll_number">University Roll Number / ID</label>
+                <input type="text" name="roll_number" id="roll_number" class="form-control" placeholder="e.g., 20CSEDS102" required>
+            </div>
+        </div>
+
+        <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+            <div class="form-group">
+                <label for="section">Section / Class</label>
+                <input type="text" name="section" id="section" class="form-control" placeholder="e.g., CSE-DS-A" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address (Optional)</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="e.g., krish@suryodaya.edu.in">
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 0.5rem;">
+            <label for="photos">Upload Front-Facing Reference Images</label>
+            <p style="color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 0.5rem;">
+                Select between <strong>3 to 10 photos</strong>. Ensure photos are front-facing, well-lit, and contain only the registered student.
+            </p>
+            <input type="file" name="photos" id="photos" class="form-control" accept="image/*" multiple required>
+        </div>
+
+        <!-- DPDP Compliance Biometric Consent Box -->
+        <div class="consent-box" id="dpdp-consent-container">
+            <h4 style="color: var(--accent-cyan); font-size: 0.85rem; margin-bottom: 0.4rem; font-weight: 700;">Digital Personal Data Protection (DPDP) Act, 2023 Consent Notice</h4>
+            <div class="consent-text" id="consent-disclosure">
+                I consent to the collection of my facial photographs and derived biometric data (face encodings) for the purpose of automated attendance marking at Suryodaya College of Engineering & Technology, Nagpur. I understand that: (1) my data will be stored securely on the institution's server, (2) it will not be shared with third parties, (3) data will be retained for the duration of my enrollment and deleted within 30 days of enrollment end, (4) I may withdraw consent at any time by contacting the system administrator, and (5) withdrawal of consent will require reversion to manual attendance. This consent is required under India's DPDP Act, 2023.
+            </div>
+            <label class="checkbox-container" for="consent_given" id="consent-checkbox-label">
+                <input type="checkbox" name="consent_given" id="consent_given" value="yes" required>
+                <span>I explicitly give consent for biometric enrollment and agree to the terms listed above.</span>
+            </label>
+        </div>
+
+        <div style="display: flex; gap: 1rem; align-items: center; justify-content: flex-end; margin-top: 1.5rem;">
+            <a href="/admin" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary" id="reg-submit-btn">Enroll Student</button>
+        </div>
+    </form>
+    
+    <!-- Spinner overlay when processing -->
+    <div id="processing-overlay" style="display: none; text-align: center; margin-top: 1.5rem; padding: 1.5rem; background: rgba(6, 182, 212, 0.05); border: 1px dashed rgba(6, 182, 212, 0.3); border-radius: 8px;">
+        <div class="pulse-dot active" style="margin: 0 auto 1rem auto; width: 12px; height: 12px;"></div>
+        <h4 style="color: var(--accent-cyan);">Generating Biometric Templates...</h4>
+        <p style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.2rem;">Generating 128-dimensional encodings. This takes up to 10 seconds.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('student-reg-form').addEventListener('submit', function(e) {
+        const photosInput = document.getElementById('photos');
+        if (photosInput.files.length < 3) {
+            e.preventDefault();
+            alert('Please select at least 3 photos for student registration.');
+            return;
+        }
+        if (photosInput.files.length > 10) {
+            e.preventDefault();
+            alert('Please select a maximum of 10 photos.');
+            return;
+        }
+        
+        // Hide form and show spinner
+        this.style.display = 'none';
+        document.getElementById('processing-overlay').style.display = 'block';
+    });
+</script>
+{% endblock %}

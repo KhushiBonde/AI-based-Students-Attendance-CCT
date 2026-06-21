@@ -1,0 +1,189 @@
+{% extends "layout.html" %}
+
+{% block title %}Admin Control | AI CCTV Attendance{% endblock %}
+
+{% block content %}
+<div class="config-layout" id="admin-panel">
+    <!-- Authorization Guard -->
+    {% if not session.get('admin_logged_in') %}
+    <div style="max-width: 450px; margin: 4rem auto;" class="glass-card" id="admin-login-card">
+        <h2 class="gradient-text" style="text-align: center; margin-bottom: 1.5rem;">Admin Authorization</h2>
+        <form action="/admin" method="POST" id="admin-login-form">
+            <div class="form-group">
+                <label for="password">System Administrator Password</label>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Authorize Access</button>
+        </form>
+    </div>
+    {% else %}
+    
+    <!-- Admin Dashboard (Authorized) -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div>
+            <h1 class="gradient-text" style="margin-bottom: 0.2rem;">Admin Control Center</h1>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Manage attendance sessions, adjust system settings, and audit biometric consent logs.</p>
+        </div>
+        <form action="/admin" method="POST">
+            <input type="hidden" name="logout" value="1">
+            <button type="submit" class="btn btn-secondary btn-sm">Lock Console</button>
+        </form>
+    </div>
+
+    <!-- Active Session Manager & Configs Grid -->
+    <div class="grid" style="grid-template-columns: 1fr; gap: 2rem;">
+        <!-- Left Column: Sessions -->
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            
+            <!-- Session Controls Card -->
+            <div class="glass-card" id="session-controls-card">
+                <h2 class="gradient-text">Session Management</h2>
+                
+                {% if active_session %}
+                <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 1.25rem; margin-top: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <span class="badge badge-present" style="margin-bottom: 0.5rem; display: inline-block;">ACTIVE SESSION RECORDING</span>
+                            <h3 style="margin: 0; font-size: 1.2rem;">{{ active_session.subject }}</h3>
+                            <span style="color: var(--text-secondary); font-size: 0.85rem;">Section: <strong>{{ active_session.section }}</strong> | Started: {{ active_session.start_time.split('T')[1][:8] }}</span>
+                        </div>
+                        <form action="/admin/session/stop" method="POST">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Stop this session?')">Stop Session</button>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <form action="/admin/session/start" method="POST" style="margin-top: 1rem;" id="start-session-form">
+                    <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="subject">Subject Name / Course Title</label>
+                            <input type="text" name="subject" id="subject" class="form-control" placeholder="e.g., Data Science, Computer Networks" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label for="section">Class / Section Code</label>
+                            <input type="text" name="section" id="section" class="form-control" placeholder="e.g., CSE-DS-A, Section-B" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Start Live Attendance Session</button>
+                </form>
+                {% endif %}
+            </div>
+
+            <!-- Session History Logs -->
+            <div class="glass-card" id="session-history-card">
+                <h2 class="gradient-text">Session History Log</h2>
+                <div class="table-container" style="margin-top: 1rem;">
+                    <table id="history-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Subject</th>
+                                <th>Section</th>
+                                <th>Attendance Count</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if sessions_history %}
+                                {% for session in sessions_history %}
+                                <tr>
+                                    <td>{{ session.date }}</td>
+                                    <td><strong>{{ session.subject }}</strong></td>
+                                    <td>{{ session.section }}</td>
+                                    <td>{{ session.total_present }} / {{ session.total_enrolled }} present</td>
+                                    <td>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <a href="/admin/reports/export/{{ session.session_id }}" class="btn btn-secondary btn-sm">Export CSV</a>
+                                            <form action="/admin/session/delete" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this session? This action is irreversible.')">
+                                                <input type="hidden" name="session_id" value="{{ session.session_id }}">
+                                                <button type="submit" class="btn btn-danger btn-sm" style="background: none; border: 1px solid var(--accent-red); color: var(--accent-red); box-shadow: none;">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="empty-state">No historical sessions recorded yet.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Settings & Consent Logs -->
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <!-- System Parameters Configuration -->
+            <div class="glass-card" id="system-config-card">
+                <h2 class="gradient-text">Core Settings</h2>
+                <form action="/admin/config" method="POST" style="margin-top: 1rem;" id="sys-config-form">
+                    <div class="form-group">
+                        <label for="threshold">Recognition Tolerance / Threshold: <span id="threshold-val" style="color: var(--accent-cyan); font-weight: bold;">{{ current_config.threshold }}</span></label>
+                        <p style="color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 0.5rem;">Lower is stricter (less false acceptances). Higher is more relaxed.</p>
+                        <input type="range" name="threshold" id="threshold" class="form-control" min="0.4" max="0.8" step="0.05" value="{{ current_config.threshold }}" oninput="document.getElementById('threshold-val').innerText = this.value">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="interval">Frame Evaluation Interval: <span id="interval-val" style="color: var(--accent-cyan); font-weight: bold;">{{ current_config.interval }}</span></label>
+                        <p style="color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 0.5rem;">Evaluate every Nth video frame to lower CPU workload.</p>
+                        <input type="range" name="interval" id="interval" class="form-control" min="1" max="10" step="1" value="{{ current_config.interval }}" oninput="document.getElementById('interval-val').innerText = this.value">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="model">Face Detection Model</label>
+                        <select name="model" id="model" class="form-control">
+                            <option value="hog" {% if current_config.model == 'hog' %}selected{% endif %}>HOG (Standard CPU Optimized)</option>
+                            <option value="cnn" {% if current_config.model == 'cnn' %}selected{% endif %}>CNN (Angled Face / GPU Optimized)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="camera">Camera Source (Index or Stream URL)</label>
+                        <p style="color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 0.5rem;">0 for laptop webcam, 1/2 for OBS virtual cam / mobile apps, or HTTP stream URL.</p>
+                        <input type="text" name="camera" id="camera" class="form-control" value="{{ current_config.camera }}" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Configuration</button>
+                </form>
+            </div>
+
+            <!-- Biometric Consent Logs (DPDP Audit Trail) -->
+            <div class="glass-card" id="consent-log-card">
+                <h2 class="gradient-text">DPDP Consent Logs</h2>
+                <p style="color: var(--text-secondary); font-size: 0.75rem; margin-bottom: 1rem;"> Biometric records logged under India's Digital Personal Data Protection Act, 2023.</p>
+                <div class="table-container" style="max-height: 250px; overflow-y: auto;">
+                    <table id="consent-table">
+                        <thead>
+                            <tr>
+                                <th>Roll Number</th>
+                                <th>Name</th>
+                                <th>IP Logged</th>
+                                <th>Date Signed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if students_list %}
+                                {% for student in students_list %}
+                                <tr>
+                                    <td><strong>{{ student.roll_number }}</strong></td>
+                                    <td>{{ student.name }}</td>
+                                    <td><code style="color: var(--accent-cyan);">{{ student.consent_ip }}</code></td>
+                                    <td style="font-size: 0.8rem; color: var(--text-secondary);">{{ student.consent_timestamp.split('T')[0] }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="4" class="empty-state">No consent audits registered.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Based CCTV Student Attendance System. Real-time face detection, recognition, and attendance tracking.">
+    <title>{% block title %}AI CCTV Attendance{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Style System -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header id="main-header">
+        <div class="nav-container">
+            <a href="/" class="logo-link" id="nav-logo-link">
+                <div class="logo">
+                    <div class="logo-dot"></div>
+                    <span>CCTV ATTENDANCE AI</span>
+                </div>
+            </a>
+            <nav id="nav-menu">
+                <ul class="nav-links">
+                    <li><a href="/" id="nav-dashboard" class="{% if request.path == '/' %}active{% endif %}">Dashboard</a></li>
+                    <li><a href="/admin" id="nav-admin" class="{% if request.path.startswith('/admin') and not request.path.endswith('/register') and not request.path.endswith('/reports') %}active{% endif %}">Admin Control</a></li>
+                    <li><a href="/admin/register" id="nav-register" class="{% if request.path == '/admin/register' %}active{% endif %}">Register Student</a></li>
+                    <li><a href="/admin/reports" id="nav-reports" class="{% if request.path == '/admin/reports' %}active{% endif %}">Reports</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" id="main-content">
+        <!-- Flashed Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div id="flash-messages-container">
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category if category != 'error' else 'danger' }}" role="alert">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer id="main-footer">
+        <p>&copy; 2026 Surya Attendance System. Designed for Suryodaya College of Engineering & Technology, Nagpur. Under India's <a href="https://www.meity.gov.in/content/digital-personal-data-protection-act-2023" target="_blank" rel="noopener noreferrer">DPDP Act, 2023</a>.</p>
+    </footer>
+
+    <!-- Main Client Script -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
