@@ -9,7 +9,3 @@ services:
         value: "true"
       - key: PORT
         value: 5000
-    disk:
-      name: attendance-storage
-      mountPath: /opt/render/persistent
-      sizeGB: 1

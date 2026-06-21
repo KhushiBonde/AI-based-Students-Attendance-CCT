@@ -6,8 +6,21 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Data storage paths
 if os.environ.get('RENDER') == 'true':
     PERSISTENT_DIR = "/opt/render/persistent"
-    DATA_DIR = os.path.join(PERSISTENT_DIR, "data")
-    KNOWN_FACES_DIR = os.path.join(PERSISTENT_DIR, "known_faces")
+    # Check if we have write access to the persistent volume mount (Paid Tier)
+    try:
+        os.makedirs(PERSISTENT_DIR, exist_ok=True)
+        # Test write permission
+        test_file = os.path.join(PERSISTENT_DIR, ".write_test")
+        with open(test_file, 'w') as f:
+            f.write("test")
+        os.remove(test_file)
+        # Use persistent storage
+        DATA_DIR = os.path.join(PERSISTENT_DIR, "data")
+        KNOWN_FACES_DIR = os.path.join(PERSISTENT_DIR, "known_faces")
+    except Exception:
+        # Fall back to local project folder (Free Tier - ephemeral)
+        DATA_DIR = os.path.join(BASE_DIR, "data")
+        KNOWN_FACES_DIR = os.path.join(BASE_DIR, "known_faces")
 else:
     DATA_DIR = os.path.join(BASE_DIR, "data")
     KNOWN_FACES_DIR = os.path.join(BASE_DIR, "known_faces")
