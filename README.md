@@ -17,7 +17,7 @@ An intelligent CCTV-based automated attendance management system using Face Reco
 
 Click here to access the project:  
 
-[Open Live Application](https://student-attendance-system-reih.onrender.com))
+[Open Live Application](https://student-attendance-system-reih.onrender.com)
 ---
 
 # Abstract
@@ -267,17 +267,3 @@ The system eliminates manual attendance processes, prevents proxy attendance, im
 5. Face Recognition Attendance System Research Papers
 
 ---
-
-# Installation
-
-```bash id="i1"
-git clone https://github.com/KhushiBonde/AI-based-Students-Attendance-CCT.git
-```
-
-```bash id="i2"
-pip install -r requirements.txt
-```
-
-```bash id="i3"
-python app.py
-```
