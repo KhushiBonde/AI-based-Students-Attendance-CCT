@@ -1,0 +1,106 @@
+AI-BASED STUDENT ATTENDANCE SYSTEM
+PROJECT STRUCTURE
+
+============================================================
+STUDENT ATTENDANCE PROJECT
+==========================
+
+StudentAttendance/
+│
+├── app.py
+│      └── Main application entry point
+│
+├── config.py
+│      └── Project configuration settings
+│
+├── requirements.txt
+│      └── Python dependencies
+│
+├── README.md
+│      └── Project documentation
+│
+├── core/
+│   │
+│   ├── attendance.py
+│   │      └── Attendance marking logic
+│   │
+│   ├── encoder.py
+│   │      └── Face encoding generation
+│   │
+│   └── recognition.py
+│          └── Face recognition system
+│
+├── data/
+│   │
+│   ├── encodings_db.pkl
+│   │      └── Stored facial encodings database
+│   │
+│   ├── students.csv
+│   │      └── Student records
+│   │
+│   └── attendance/
+│          └── Attendance records storage
+│
+├── known_faces/
+│      └── Registered student face images
+│
+├── static/
+│   │
+│   ├── css/
+│   │      └── Frontend styling
+│   │
+│   └── js/
+│          └── Frontend logic
+│
+├── templates/
+│   │
+│   ├── layout.html
+│   ├── index.html
+│   ├── admin.html
+│   ├── register.html
+│   └── reports.html
+│
+└── tests/
+│
+└── test_core.py
+└── Testing core functionalities
+
+============================================================
+SYSTEM ARCHITECTURE
+===================
+
+CCTV Camera Feed
+│
+▼
+Face Detection
+│
+▼
+Face Encoding
+│
+▼
+Recognition Module
+│
+▼
+Student Matching
+│
+▼
+Attendance Verification
+│
+▼
+Attendance Database Update
+
+============================================================
+TECHNOLOGY STACK
+================
+
+Backend         : Python
+Computer Vision : OpenCV
+Recognition     : Face Recognition Library
+Frontend        : HTML / CSS / JavaScript
+Framework       : Flask
+Database        : CSV + Pickle Storage
+Version Control : GitHub
+
+============================================================
+END
+===
