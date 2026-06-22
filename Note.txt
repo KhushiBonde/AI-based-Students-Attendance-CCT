@@ -1,0 +1,110 @@
+AI-BASED STUDENT ATTENDANCE SYSTEM
+HOW TO RUN PROJECT
+
+=========================================================
+
+1. CLONE REPOSITORY
+   =========================================================
+
+git clone https://github.com/KhushiBonde/AI-based-Students-Attendance-CCT.git
+
+cd AI-based-Students-Attendance-CCT
+
+=========================================================
+2. CREATE VIRTUAL ENVIRONMENT
+=============================
+
+python -m venv venv
+
+Windows:
+
+venv\Scripts\activate
+
+Mac/Linux:
+
+source venv/bin/activate
+
+=========================================================
+3. INSTALL DEPENDENCIES
+=======================
+
+pip install -r requirements.txt
+
+=========================================================
+4. VERIFY PROJECT FILES
+=======================
+
+app.py
+config.py
+requirements.txt
+core/
+data/
+known_faces/
+templates/
+static/
+
+=========================================================
+5. RUN APPLICATION
+==================
+
+python app.py
+
+=========================================================
+6. OPEN APPLICATION
+===================
+
+Open browser and visit:
+
+http://localhost:5000
+
+(or port configured inside app.py)
+
+=========================================================
+7. HOW SYSTEM WORKS
+===================
+
+Step 1 → Register student face
+
+Step 2 → Generate face encoding
+
+Step 3 → Store facial data
+
+Step 4 → Start CCTV/live camera feed
+
+Step 5 → Detect face
+
+Step 6 → Match face with database
+
+Step 7 → Mark attendance automatically
+
+=========================================================
+8. TROUBLESHOOTING
+==================
+
+If OpenCV error:
+
+pip install opencv-python
+
+If face recognition error:
+
+pip install face-recognition
+
+If dependencies missing:
+
+pip install -r requirements.txt
+
+=========================================================
+TECH STACK
+==========
+
+Python
+OpenCV
+Flask
+Face Recognition
+HTML
+CSS
+JavaScript
+
+=========================================================
+END
+===
