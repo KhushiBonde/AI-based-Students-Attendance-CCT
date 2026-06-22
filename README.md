@@ -1,284 +1,286 @@
-# AI-Based CCTV Student Attendance Detection System
+# AI-Based Student Attendance System using CCTV Face Recognition
 
-> Real-time AI-powered student attendance management using **Flask**, **OpenCV**, **dlib ResNet-34**, and **Face Recognition**.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge&logo=python">
+  <img src="https://img.shields.io/badge/OpenCV-Computer%20Vision-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Face%20Recognition-AI-red?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Flask-Web%20Application-black?style=for-the-badge&logo=flask">
+</p>
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
-![Flask](https://img.shields.io/badge/Flask-Web%20Framework-black)
-![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-green)
-![Face Recognition](https://img.shields.io/badge/Face%20Recognition-dlib%20ResNet34-orange)
-
----
-
-## Project Overview
-
-The **AI-Based CCTV Student Attendance Detection System** is a real-time attendance monitoring platform designed for educational institutions. The system automatically detects and recognizes students from CCTV cameras or webcams and records attendance without manual intervention.
-
-Built using **Python**, **Flask**, **OpenCV**, and the **face_recognition** library powered by **dlib's ResNet-34 deep metric learning model**, the application provides a secure, scalable, and DPDP-compliant attendance solution.
+<p align="center">
+An intelligent CCTV-based automated attendance management system using Face Recognition, Computer Vision, and Artificial Intelligence.
+</p>
 
 ---
 
-## Key Features
+# Live Deployment
 
-### Biometric Student Enrollment
+Add deployment link here if hosted.
 
-* Register students using **3–10 reference images**
-* Generates a stable **128-dimensional facial encoding**
-* Stores face embeddings for future recognition
-
-### Real-Time Attendance Monitoring
-
-* Live CCTV/Webcam stream processing
-* Green bounding boxes for recognized faces
-* Red bounding boxes for unknown individuals
-* Background-threaded processing for smooth performance
-
-### Automated Attendance Marking
-
-* Instant attendance logging
-* Session-based attendance records
-* Duplicate attendance prevention
-
-### Manual Attendance Overrides
-
-* Teachers can manually mark:
-
-  * Present
-  * Absent
-* AJAX-powered real-time updates
-
-### Attendance Reports
-
-* Excel report generation
-* Weekly attendance summaries
-* Attendance percentage calculations
-* Automatic highlighting of students below **75% attendance**
-
-### DPDP Act Compliance (India)
-
-* Student biometric consent collection
-* Consent audit logs
-* IP address and timestamp recording
-* Data deletion & biometric purging support
-
----
-
-## Project Architecture
-
-```text
-StudentAttendance/
-├── app.py
-├── config.py
-├── requirements.txt
-├── README.md
-│
-├── core/
-│   ├── attendance.py
-│   ├── encoder.py
-│   └── recognition.py
-│
-├── data/
-│   ├── encodings_db.pkl
-│   ├── students.csv
-│   └── attendance/
-│
-├── known_faces/
-│
-├── static/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── main.js
-│
-├── templates/
-│   ├── layout.html
-│   ├── index.html
-│   ├── admin.html
-│   ├── register.html
-│   └── reports.html
-│
-└── tests/
-    └── test_core.py
+```text id="r1"
+[PASTE_DEPLOYMENT_LINK_HERE](https://student-attendance-system-reih.onrender.com)
 ```
 
 ---
 
-## Technology Stack
+# Abstract
 
-| Category            | Technology                 |
-| ------------------- | -------------------------- |
-| Backend             | Flask                      |
-| Face Recognition    | face_recognition           |
-| Deep Learning Model | dlib ResNet-34             |
-| Computer Vision     | OpenCV                     |
-| Data Storage        | CSV + Pickle               |
-| Reporting           | Pandas + OpenPyXL          |
-| Frontend            | HTML, CSS, JavaScript      |
-| Deployment          | Local Network / CCTV Setup |
+Manual attendance systems are inefficient, time-consuming, and vulnerable to proxy attendance. This project introduces an AI-based automated student attendance system that uses CCTV camera feeds and facial recognition technology to identify students automatically and mark attendance.
+
+The system uses Computer Vision and Face Recognition techniques to detect faces, encode facial features, match them with stored student records, and automatically update attendance logs. The project improves attendance accuracy while eliminating manual effort.
 
 ---
 
-## Installation
+# 1. Introduction
 
-### Clone Repository
+Educational institutions often rely on manual attendance systems that consume time and allow fraudulent attendance marking.
 
-```bash
-git clone <repository-url>
-cd StudentAttendance
+This project automates attendance tracking using AI-powered face recognition through CCTV camera feeds. The system identifies students in real time and automatically records attendance in a centralized database.
+
+Objectives:
+
+* Automate attendance process
+* Reduce proxy attendance
+* Improve accuracy
+* Eliminate manual intervention
+* Enable real-time student monitoring
+
+---
+
+## Project Workflow
+
+```mermaid id="m1"
+flowchart LR
+
+A[CCTV Camera Feed] --> B[Face Detection]
+B --> C[Face Encoding]
+C --> D[Face Recognition]
+D --> E[Attendance Verification]
+E --> F[Attendance Stored]
 ```
 
-### Create Virtual Environment
+---
 
-```bash
-python -m venv venv
+# 2. Literature Review
+
+Traditional attendance systems depend on:
+
+* Manual roll calls
+* RFID cards
+* Fingerprint scanners
+* Barcode systems
+
+Limitations:
+
+* Time consuming
+* Human dependency
+* Proxy attendance possible
+* Limited scalability
+
+Existing AI systems use:
+
+* Face Detection algorithms
+* CNN-based recognition systems
+* OpenCV image processing
+* Machine Learning classifiers
+
+Compared to traditional systems, face recognition-based attendance provides faster and more secure verification.
+
+---
+
+## Comparison with Existing Systems
+
+| Feature              | Manual Attendance | RFID/Fingerprint | Proposed System |
+| -------------------- | ----------------- | ---------------- | --------------- |
+| Manual Process       | Yes               | Partial          | No              |
+| Proxy Attendance     | Possible          | Reduced          | Eliminated      |
+| Real-Time Monitoring | No                | Limited          | Yes             |
+| Automation           | Low               | Medium           | High            |
+| Accuracy             | Medium            | High             | Very High       |
+
+---
+
+# 3. Methodology
+
+The project follows the following process.
+
+### Face Registration
+
+Student face images are captured and stored.
+
+### Face Encoding
+
+Facial embeddings are generated and saved.
+
+### Face Detection
+
+The system detects faces from CCTV camera feed.
+
+### Recognition
+
+Detected faces are matched against known face encodings.
+
+### Attendance Logging
+
+Recognized students are automatically marked present.
+
+---
+
+## System Architecture
+
+```text id="a2"
+Student Face Registration
+            │
+            ▼
+Face Encoding Generation
+            │
+            ▼
+Store Encodings Database
+            │
+            ▼
+Live CCTV Feed
+            │
+            ▼
+Face Detection using OpenCV
+            │
+            ▼
+Face Recognition
+            │
+            ▼
+Match Student Identity
+            │
+            ▼
+Attendance Marked Automatically
 ```
 
-#### Windows
+---
 
-```bash
-venv\Scripts\activate
+# 4. Implementation
+
+Technologies Used:
+
+* Python
+* OpenCV
+* Face Recognition Library
+* Flask
+* HTML
+* CSS
+* JavaScript
+* Pickle Database
+* CSV Storage
+
+Development Components:
+
+* Face Encoder Module
+* Recognition Module
+* Attendance Management Module
+* Admin Dashboard
+* Student Registration System
+* Attendance Reports System
+
+---
+
+## Implementation Pipeline
+
+```mermaid id="m2"
+flowchart TD
+
+A[Register Student] --> B[Capture Face]
+B --> C[Generate Encoding]
+C --> D[Store Database]
+D --> E[Live Camera Feed]
+E --> F[Face Recognition]
+F --> G[Attendance Marked]
 ```
 
-#### Linux / macOS
+---
 
-```bash
-source venv/bin/activate
+# 5. Results
+
+The system successfully performs:
+
+* Student face registration
+* Real-time face detection
+* Automatic face recognition
+* Automated attendance logging
+* Attendance report generation
+
+Performance Benefits:
+
+* Reduced manual work
+* Faster attendance process
+* Improved attendance security
+* Accurate student identification
+
+---
+
+# 6. Limitations
+
+Current limitations include:
+
+* Poor lighting affects recognition
+* Camera quality impacts accuracy
+* Multiple faces may reduce performance
+* Requires proper face registration
+* Similar facial structures may cause false recognition
+
+---
+
+# 7. Future Scope
+
+Possible improvements:
+
+* Cloud database integration
+* Multi-camera support
+* Mobile application
+* Anti-spoofing detection
+* Mask detection support
+* Integration with college ERP systems
+* Real-time analytics dashboard
+
+---
+
+## Future Expansion Architecture
+
+```mermaid id="m3"
+flowchart LR
+
+A[Current Attendance System] --> B[Cloud Database]
+B --> C[Multiple CCTV Cameras]
+C --> D[ERP Integration]
+D --> E[Mobile Dashboard]
 ```
 
-### Install dlib
+---
 
-```bash
-pip install https://github.com/z-mahmud22/Dlib_Windows_Python3.x/raw/main/dlib-20.0.99-cp313-cp313-win_amd64.whl
+# 8. Conclusion
+
+This project successfully developed an automated student attendance management system using AI-based face recognition and CCTV monitoring.
+
+The system eliminates manual attendance processes, prevents proxy attendance, improves operational efficiency, and demonstrates the practical application of Artificial Intelligence in education automation.
+
+---
+
+# 9. References
+
+1. OpenCV Documentation
+2. Face Recognition Python Library Documentation
+3. Flask Documentation
+4. Computer Vision Research Papers
+5. Face Recognition Attendance System Research Papers
+
+---
+
+# Installation
+
+```bash id="i1"
+git clone https://github.com/KhushiBonde/AI-based-Students-Attendance-CCT.git
 ```
 
-### Install Dependencies
-
-```bash
+```bash id="i2"
 pip install -r requirements.txt
 ```
 
-### Verify Installation
-
-```bash
-python -c "import face_recognition; print('Dlib & Face Recognition Loaded Successfully!')"
-```
-
----
-
-## Running the Application
-
-### Run Unit Tests
-
-```bash
-python -m unittest tests/test_core.py
-```
-
-### Start Flask Server
-
-```bash
+```bash id="i3"
 python app.py
 ```
-
-Application will be available at:
-
-```text
-http://localhost:5000
-```
-
----
-
-## LAN Access
-
-To allow faculty members to access the system from the same network:
-
-```text
-http://<your-ip-address>:5000
-```
-
-Example:
-
-```text
-http://192.168.1.10:5000
-```
-
----
-
-## Attendance Workflow
-
-1. Register Student
-2. Capture Face Images
-3. Generate Face Encodings
-4. Start Attendance Session
-5. Detect Faces from CCTV/Webcam
-6. Match Encodings
-7. Mark Attendance
-8. Generate Reports
-
----
-
-## Security & DPDP Compliance
-
-The system follows principles of India's **Digital Personal Data Protection (DPDP) Act, 2023**.
-
-Implemented measures include:
-
-* Explicit biometric consent collection
-* Timestamped consent records
-* IP address logging
-* Audit trail maintenance
-* Soft delete functionality
-* Permanent biometric data removal
-* Secure attendance records
-
----
-
-## Default Admin Credentials
-
-**Password**
-
-```text
-admin123
-```
-
-> Change the default password immediately in `config.py` before deployment.
-
----
-
-## Screenshots
-
-```text
-screenshots/
-├── dashboard.png
-├── enrollment.png
-├── reports.png
-└── attendance.png
-```
-
----
-
-## Future Enhancements
-
-* Multi-camera support
-* Cloud deployment
-* Mobile application
-* Face mask detection
-* Liveness detection
-* Email attendance reports
-* SMS notifications
-* PostgreSQL integration
-
----
-
-## Author
-
-**Khushi Bonde**
-B.Tech CSE (Data Science)
-Suryodaya College of Engineering & Technology, Nagpur
-RTM Nagpur University (RTMNU)
-
----
-
-## License
-
-This project is developed for educational and academic purposes as a Final Year Project.
-
-© 2026 Khushi Bonde. All Rights Reserved.
