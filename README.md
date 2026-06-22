@@ -18,7 +18,7 @@ An intelligent CCTV-based automated attendance management system using Face Reco
 Add deployment link here if hosted.
 
 ```text id="r1"
-[PASTE_DEPLOYMENT_LINK_HERE](https://student-attendance-system-reih.onrender.com)
+(https://student-attendance-system-reih.onrender.com)
 ```
 
 ---
