@@ -17,7 +17,7 @@ An intelligent CCTV-based automated attendance management system using Face Reco
 
 Click here to access the project:  
 
-[Open Live Application](https://student-attendance-system-reih.onrender.com
+[Open Live Application](https://student-attendance-system-reih.onrender.com)
 ---
 
 # Abstract
